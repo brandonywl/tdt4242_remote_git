@@ -12,6 +12,8 @@ services:
         DJANGO_SUPERUSER_EMAIL: "${DJANGO_SUPERUSER_EMAIL}"
     environment: 
       - GROUPID=${GROUPID}
+    volumes:
+      - ./backend/secfit:/code/secfit
     networks:
       backend_bridge:
         ipv4_address: 10.${GROUPID}.0.4
@@ -26,6 +28,8 @@ services:
         DOMAIN: ${DOMAIN}
         URL_PREFIX: ${URL_PREFIX}
         PORT_PREFIX: ${PORT_PREFIX}
+    volumes:
+      - ./frontend/www:/app/www
     networks:
       backend_bridge:
         ipv4_address: 10.${GROUPID}.0.5

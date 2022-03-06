@@ -6,14 +6,14 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # Make a new directory to put our code in.
-RUN mkdir /code
+RUN mkdir -p /code/secfit
 
 # Change the working directory. 
 # Every command after this will be run from the /code directory.
-WORKDIR /code
+WORKDIR /code/secfit
 
 # Copy the of the code. 
-COPY . /code/
+COPY . /code/secfit
 
 # Add sqlite3 to enable dbshell command for managing the database
 RUN apt-get update -y && apt-get install sqlite3 -y

@@ -104,6 +104,11 @@ is_prod = os.environ.get("IS_HEROKU", None)
 if is_prod:
     settings(locals())
 
+current_dir = Path(__file__).resolve(strict=True)
+print("+++")
+print(current_dir.parent.parent.parent)
+print("+++")
+
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
     print("\n\n\n\n\nHEI\n\n\n\n\n\n")
@@ -112,7 +117,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": current_dir.parent.parent.parent / "db.sqlite3",
         }
     }
 
