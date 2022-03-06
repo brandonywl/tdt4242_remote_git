@@ -13,7 +13,7 @@
     <navbar-el></navbar-el>
 
     <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
-        <form>
+        <form id="updateUserBio">
             <div class="form-group">
                 <label for="profilePic">Profile Picture</label>
                 <input type="file" class="form-control-file" id="profilePic">
@@ -21,15 +21,15 @@
             <br>
             <div class="form-group">
                 <label for="bioTextArea">Bio</label>
-                <textarea class="form-control" id="bioTextArea" rows="3"></textarea>
+                <textarea name="bio" class="form-control" id="bioTextArea" rows="3"></textarea>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary mb-2">Save</button>
+            <button type="button" id="save-btn" class="btn btn-primary mb-2">Save</button>
         </form>
     </div>
 
     <script src="scripts/scripts.js"></script>
     <script src="scripts/defaults.js"></script>
-
+    <script src="scripts/editprofile.js"></script>
 </body>
 </html>

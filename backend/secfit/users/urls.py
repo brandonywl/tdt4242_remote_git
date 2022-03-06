@@ -6,6 +6,7 @@ urlpatterns = [
     path("api/users/", views.UserList.as_view(), name="user-list"),
     path("api/users/<int:pk>/", views.UserDetail.as_view(), name="user-detail"),
     path("api/users/<str:username>/", views.UserDetail.as_view(), name="user-detail"),
+    path("api/users/updateBio/<int:pk>/", views.updateUserBio, name="update-user-bio"),
     path("api/offers/", views.OfferList.as_view(), name="offer-list"),
     path("api/offers/<int:pk>/", views.OfferDetail.as_view(), name="offer-detail"),
     path(

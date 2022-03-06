@@ -82,6 +82,18 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
+class UserBioPutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["bio"]
+
+    def update(self, instance, validated_data):
+        instance.bio = validated_data.get("bio", instance.bio)
+        instance.save()
+
+        return instance
+
+
 class UserPutSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()

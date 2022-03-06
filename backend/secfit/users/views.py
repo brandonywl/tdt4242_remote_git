@@ -1,5 +1,7 @@
 import django
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 from workouts.mixins import CreateListModelMixin
 from rest_framework import permissions
 from users.serializers import (
@@ -8,6 +10,7 @@ from users.serializers import (
     AthleteFileSerializer,
     UserPutSerializer,
     UserGetSerializer,
+    UserBioPutSerializer,
 )
 from rest_framework.permissions import (
     AllowAny,
@@ -46,6 +49,21 @@ class UserList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
                 qs = get_user_model().objects.filter(pk=self.request.user.pk)
 
         return qs
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated & IsCurrentUser])
+def updateUserBio(request, pk):
+    try:
+        user = get_user_model().objects.get(pk=pk)
+    except get_user_model().DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserBioPutSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserDetail(
