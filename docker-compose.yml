@@ -10,10 +10,15 @@ services:
         DJANGO_SUPERUSER_USERNAME: "${DJANGO_SUPERUSER_USERNAME}"
         DJANGO_SUPERUSER_PASSWORD: "${DJANGO_SUPERUSER_PASSWORD}"
         DJANGO_SUPERUSER_EMAIL: "${DJANGO_SUPERUSER_EMAIL}"
+    volumes:
+      - static_volume:/usr/src/static
+      - media_volume:/usr/src/media
     environment: 
       - GROUPID=${GROUPID}
-    volumes:
-      - ./backend/secfit:/code/secfit
+      - USE_S3="${USE_S3}"
+      - AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
+      - AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+      - AWS_STORAGE_BUCKET_NAME="${AWS_STORAGE_BUCKET_NAME}"
     networks:
       backend_bridge:
         ipv4_address: 10.${GROUPID}.0.4
@@ -54,3 +59,7 @@ networks:
     ipam:
         config:
           - subnet: 10.${GROUPID}.0.0/18
+
+volumes:
+    static_volume:
+    media_volume:
