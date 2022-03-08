@@ -9,7 +9,7 @@ class NavBar extends HTMLElement {
         <div class="container-fluid">
             <a class="navbar-brand fw-bold ms-5 me-3" href="#">SecFit</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse ms-1" id="navbarNavAltMarkup">
             <div class="navbar-nav me-auto">
@@ -22,6 +22,10 @@ class NavBar extends HTMLElement {
                 <a class="nav-link hide" id="nav-profile" href="profile.html">Profile</a>
                 <hr>
             </div>
+            <form class="d-flex p-2 navbar-nav hide" id="search-bar">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <div class="my-2 my-lg-0 me-5">
                 <a role="button" class="btn btn-primary hide" id="btn-register" href="register.html">Register</a>
                 <a role="button" class="btn btn-secondary hide" id="btn-login-nav" href="login.html">Log in</a>
