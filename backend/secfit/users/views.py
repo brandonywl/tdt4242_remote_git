@@ -11,6 +11,8 @@ from users.serializers import (
     UserPutSerializer,
     UserGetSerializer,
     UserBioPutSerializer,
+    UserFriendsListSerializer,
+    SearchUsernameSerializer
 )
 from rest_framework.permissions import (
     AllowAny,
@@ -64,6 +66,27 @@ def updateUserBio(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated & IsCurrentUser])
+def getFriendsList(request, pk):
+    try:
+        user = get_user_model().objects.get(pk=pk)
+    except get_user_model().DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserFriendsListSerializer(user)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated & IsCurrentUser])
+def searchUsername(request, keyword):
+    users = get_user_model().objects.filter(username__icontains=keyword)
+    serializer = SearchUsernameSerializer(users, many=True)
+
+    return Response(serializer.data)
 
 
 class UserDetail(

@@ -50,10 +50,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         country = validated_data["country"]
         city = validated_data["city"]
         street_address = validated_data["street_address"]
-        bio = validated_data["bio"]
         user_obj = get_user_model()(username=username, email=email, phone_number=phone_number,
-                                    country=country, city=city, street_address=street_address,
-                                    bio=bio)
+                                    country=country, city=city, street_address=street_address)
         user_obj.set_password(password)
         user_obj.save()
 
@@ -88,10 +86,23 @@ class UserBioPutSerializer(serializers.ModelSerializer):
         fields = ["bio"]
 
     def update(self, instance, validated_data):
-        instance.bio = validated_data.get("bio", instance.bio)
-        instance.save()
+        if validated_data.get("bio"):
+            instance.bio = validated_data.get("bio", instance.bio)
+            instance.save()
 
         return instance
+
+
+class UserFriendsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["friends"]
+
+
+class SearchUsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "username"]
 
 
 class UserPutSerializer(serializers.ModelSerializer):

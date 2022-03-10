@@ -19,6 +19,27 @@ class User(AbstractUser):
     city = models.TextField(max_length=50, blank=True)
     street_address = models.TextField(max_length=50, blank=True)
     bio = models.TextField(blank=True)
+    friends = models.ManyToManyField("self")
+
+
+class FriendsRequest(models.Model):
+    from_user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="from_user"
+    )
+    to_user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="to_user"
+    )
+
+    ACCEPTED = "a"
+    PENDING = "p"
+    DECLINED = "d"
+    STATUS_CHOICES = (
+        (ACCEPTED, "Accepted"),
+        (PENDING, "Pending"),
+        (DECLINED, "Declined"),
+    )
+
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default=PENDING)
 
 
 def athlete_directory_path(instance, filename):
