@@ -39,6 +39,9 @@ function handleCancelButtonDuringEdit() {
     cancelButton.className += " hide";
     editButton.className = editButton.className.replace(" hide", "");
 
+    document.querySelector("#youtube-player").style.display = "block";
+    document.querySelector("#video-details").style.display = "none";
+
     cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
 
     let form = document.querySelector("#form-exercise");
@@ -93,6 +96,9 @@ function handleEditExerciseButtonClick() {
     okButton.className = okButton.className.replace(" hide", "");
     cancelButton.className = cancelButton.className.replace(" hide", "");
     deleteButton.className = deleteButton.className.replace(" hide", "");
+
+    document.querySelector("#youtube-player").style.display = "none";
+    document.querySelector("#video-details").style.display = "block";
 
     cancelButton.addEventListener("click", handleCancelButtonDuringEdit);
 
