@@ -56,7 +56,7 @@ function handleCancelButtonDuringEdit() {
     if (oldFormData.has("calories")) form.calories.value = oldFormData.get("calories");
     if (oldFormData.has("muscleGroup")) form.muscleGroup.value = oldFormData.get("muscleGroup");
     if (oldFormData.has("unit")) form.unit.value = oldFormData.get("unit");
-    if (oldFormData.has("video")) form.unit.value = oldFormData.get("video");
+    if (oldFormData.has("video")) form.video.value = oldFormData.get("video");
     
     oldFormData.delete("name");
     oldFormData.delete("description");
@@ -234,7 +234,11 @@ async function updateExercise(id) {
         
         
         let player = document.querySelector("#youtube-player");
-        player.src = formData.get("video");
+        let videoURL = formData.get("video");
+
+        if (player.src != videoURL) {
+            player.src = videoURL;
+        }
         
         if (player.src != "") {
             player.style.display = "block";
