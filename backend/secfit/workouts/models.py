@@ -91,8 +91,8 @@ class Exercise(models.Model):
     muscleGroup = models.TextField(default="Legs")
     unit = models.CharField(max_length=50)
     video = models.TextField(blank="https://www.youtube.com/embed/NpEaa2P7qZI")
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=1)
-    owner_name = models.CharField(max_length=100, default="Secfit")
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
+    owner_name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name
