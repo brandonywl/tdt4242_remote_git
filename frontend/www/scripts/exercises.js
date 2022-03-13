@@ -14,7 +14,10 @@ async function fetchExerciseTypes(request) {
             const h5 = exerciseAnchor.querySelector("h5");
             h5.textContent = exercise.name;
 
-            const p = exerciseAnchor.querySelector("p");
+            const author = exerciseAnchor.querySelectorAll("p")[0];
+            author.textContent = exercise.owner_name;
+
+            const p = exerciseAnchor.querySelector("p.text-content");
             p.textContent = exercise.description;   
 
             container.appendChild(exerciseAnchor);

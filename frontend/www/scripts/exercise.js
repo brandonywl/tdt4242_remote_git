@@ -73,6 +73,12 @@ async function createExercise() {
     document.querySelector("select").removeAttribute("disabled")
     let form = document.querySelector("#form-exercise");
     let formData = new FormData(form);
+
+    let user = await getCurrentUser();
+
+    let videoURL = processYoutubeURL(formData.get("video"));
+    formData.set("video", videoURL);
+
     let body = {"name": formData.get("name"), 
                 "description": formData.get("description"),
                 "instructions": formData.get("instructions"),
@@ -80,7 +86,10 @@ async function createExercise() {
                 "calories": formData.get("calories"),
                 "muscleGroup": formData.get("muscleGroup"), 
                 "unit": formData.get("unit"), 
-                "video": formData.get("video")};
+                "video": formData.get("video"),
+                "owner": user["url"],
+                "owner_name": user["username"]
+            };
 
     let response = await sendRequest("POST", `${HOST}/api/exercises/`, body);
 
@@ -146,7 +155,7 @@ function updateDisplay(response) {
 
 async function retrieveExercise(id) {
     let response = await sendRequest("GET", `${HOST}/api/exercises/${id}/`);
-
+    // let currentUserResponse = await sendRequest("GET", `${HOST}/api/currentUser/`);
     console.log(response.ok)
 
     if (!response.ok) {
@@ -156,17 +165,25 @@ async function retrieveExercise(id) {
     } else {
         document.querySelector("select").removeAttribute("disabled")
         let exerciseData = await response.json();
+        // let userData = await currentUserResponse.json();    
+        let userData = await getCurrentUser();
+
         let form = document.querySelector("#form-exercise");
         let formData = new FormData(form);
 
         for (let key of formData.keys()) {
             let selector
-            key !== "muscleGroup" ? selector = `input[name="${key}"], textarea[name="${key}"]` : selector = `select[name=${key}]`
+            key !== "muscleGroup" ? selector = `input[name="${key}"], textarea[name="${key}"]` : selector = `select[name=${key}]`;
             let input = form.querySelector(selector);
             let newVal = exerciseData[key];
             input.value = newVal;
         }
-        document.querySelector("select").setAttribute("disabled", "")
+        document.querySelector("select").setAttribute("disabled", "");
+        document.querySelector("#owner-name").textContent = exerciseData["owner_name"];
+
+        if (exerciseData["owner"] != userData["url"]) {
+            editButton.classList  += " hide";
+        }
 
         updateDisplay(exerciseData);
 
@@ -239,7 +256,8 @@ async function updateExercise(id) {
                 "calories": formData.get("calories"),
                 "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
                 "unit": formData.get("unit"), 
-                "video": formData.get("video")};
+                "video": formData.get("video")
+            };
     let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body);
 
     if (!response.ok) {

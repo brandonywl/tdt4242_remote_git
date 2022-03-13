@@ -136,3 +136,12 @@
 .mgn-top {
   margin-top: 10px;
 }
+
+.author-title {
+  font-size:small;
+  font-style: italic;
+}
+
+.author-wrapper {
+  display: flex;
+}

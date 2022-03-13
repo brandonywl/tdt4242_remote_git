@@ -10,6 +10,13 @@ class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
 
+class CanEdit(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        else:
+            return obj.owner == request.user
 
 class IsOwnerOfWorkout(permissions.BasePermission):
     """Checks whether the requesting user is also the owner of the new or existing object"""

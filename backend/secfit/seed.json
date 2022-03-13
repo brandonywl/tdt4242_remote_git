@@ -6,7 +6,8 @@
         "name": "Push-up",
         "description": "A push-up (or press-up in British English) is a common calisthenics exercise beginning from the prone position.",
         "unit": "reps",
-        "video": "https://www.youtube.com/embed/NpEaa2P7qZI"
+        "video": "https://www.youtube.com/embed/IODxDxX7oi4",
+        "owner_name": "Secfit"
       }
     },
     {
@@ -17,7 +18,8 @@
         "description": "The crunch is one of the most popular abdominal exercises.",
         "instructions": "Watch video for explanation.",
         "unit": "reps",
-        "video": "https://www.youtube.com/embed/NpEaa2P7qZI"
+        "video": "https://www.youtube.com/embed/Xyd_fa5zoEU",
+        "owner_name": "Secfit"
       }
     },
     {
@@ -27,7 +29,8 @@
         "name": "Plank",
         "description": "The plank is an isometric core strength exercise that involves maintaining a position similar to a push-up for the maximum possible time.",
         "unit": "seconds",
-        "video": "https://www.youtube.com/embed/NpEaa2P7qZI"
+        "video": "https://www.youtube.com/embed/BQu26ABuVS0",
+        "owner_name": "Secfit"
       }
     }
   ]
