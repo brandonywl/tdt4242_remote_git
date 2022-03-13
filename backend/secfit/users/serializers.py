@@ -37,6 +37,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         try:
             password_validation.validate_password(password)
+            if password != password1:
+                raise forms.ValidationError("The two passwords are not the same!")
         except forms.ValidationError as error:
             raise serializers.ValidationError(error.messages)
 
