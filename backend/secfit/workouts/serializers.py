@@ -213,7 +213,7 @@ class ExerciseSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "instances"]
+        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "instances", "video"]
 
 
 class RememberMeSerializer(serializers.HyperlinkedModelSerializer):

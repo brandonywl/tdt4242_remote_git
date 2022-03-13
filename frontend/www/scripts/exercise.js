@@ -38,8 +38,13 @@ function handleCancelButtonDuringEdit() {
     deleteButton.className += " hide";
     cancelButton.className += " hide";
     editButton.className = editButton.className.replace(" hide", "");
+    
+    let player = document.querySelector("#youtube-player");
+    
+    if (player.src != "") {
+        player.style.display = "block";
+    }
 
-    document.querySelector("#youtube-player").style.display = "block";
     document.querySelector("#video-details").style.display = "none";
 
     cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
@@ -51,6 +56,7 @@ function handleCancelButtonDuringEdit() {
     if (oldFormData.has("calories")) form.calories.value = oldFormData.get("calories");
     if (oldFormData.has("muscleGroup")) form.muscleGroup.value = oldFormData.get("muscleGroup");
     if (oldFormData.has("unit")) form.unit.value = oldFormData.get("unit");
+    if (oldFormData.has("video")) form.unit.value = oldFormData.get("video");
     
     oldFormData.delete("name");
     oldFormData.delete("description");
@@ -58,6 +64,7 @@ function handleCancelButtonDuringEdit() {
     oldFormData.delete("calories");
     oldFormData.delete("muscleGroup");
     oldFormData.delete("unit");
+    oldFormData.delete("video");
 
 }
 
@@ -74,7 +81,8 @@ async function createExercise() {
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": formData.get("muscleGroup"), 
-                "unit": formData.get("unit")};
+                "unit": formData.get("unit"), 
+                "video": formData.get("video")};
 
     let response = await sendRequest("POST", `${HOST}/api/exercises/`, body);
 
@@ -138,9 +146,51 @@ async function retrieveExercise(id) {
             let input = form.querySelector(selector);
             let newVal = exerciseData[key];
             input.value = newVal;
+
+            if (key === "video") {
+                document.querySelector("#youtube-player").src = newVal;
+            }
         }
         document.querySelector("select").setAttribute("disabled", "")
+
+        let player = document.querySelector("#youtube-player");
+        if (player.src == "") {
+            player.style.display = "none";
+        }
+
     }
+}
+
+function processYoutubeURL(url) {
+    let domain = "youtu.be";
+    let embedDomain = "https://www.youtube.com/embed/";
+    let timeTag = "?t=";
+    let srcAtt = "src=\"";
+    let newURL;
+    let idx;
+
+    idx = url.search(srcAtt);
+    // Implies that the embed html is provided instead of just the URL
+    if (idx > -1) {
+        let newIdx = srcAtt.length + idx;
+        let htmlCodeSubstr = url.substring(newIdx);
+
+        idx = htmlCodeSubstr.search("\"");
+        url = htmlCodeSubstr.substring(0, idx);
+    }
+
+    idx = url.search(domain);
+    if (idx > -1) {
+        let newIdx = domain.length + idx + 1;
+        let appendix = url.substring(newIdx);
+        newURL = `${embedDomain}${appendix}`;
+    } else {
+        newURL = url.replace("watch?v=", "embed/");
+    }
+
+    newURL = newURL.replace(timeTag, "?start=");
+
+    return newURL;
 }
 
 async function updateExercise(id) {
@@ -152,12 +202,18 @@ async function updateExercise(id) {
 
     let selectedMuscleGroup = new MuscleGroup(formData.get("muscleGroup"));
 
+    let videoURL = formData.get("video");
+    videoURL = processYoutubeURL(videoURL);
+    formData.set("video", videoURL);
+    document.querySelector("#inputVideoURL").value = videoURL;
+
     let body = {"name": formData.get("name"), 
                 "description": formData.get("description"),
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
-                "unit": formData.get("unit")};
+                "unit": formData.get("unit"), 
+                "video": formData.get("video")};
     let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body);
 
     if (!response.ok) {
@@ -176,12 +232,23 @@ async function updateExercise(id) {
     
         cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
         
+        
+        let player = document.querySelector("#youtube-player");
+        player.src = formData.get("video");
+        
+        if (player.src != "") {
+            player.style.display = "block";
+        }
+
+        document.querySelector("#video-details").style.display = "none";
+
         oldFormData.delete("name");
         oldFormData.delete("description");
         oldFormData.delete("duration");
         oldFormData.delete("calories");
         oldFormData.delete("muscleGroup");
         oldFormData.delete("unit");
+        oldFormData.delete("video");
     }
 }
 

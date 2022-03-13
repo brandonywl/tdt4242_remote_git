@@ -120,6 +120,7 @@ else:
             "NAME": current_dir.parent.parent.parent / "db.sqlite3",
         }
     }
+    
 
 # CORS Policy
 CORS_ORIGIN_ALLOW_ALL = (

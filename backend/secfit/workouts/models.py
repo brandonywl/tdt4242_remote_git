@@ -88,6 +88,7 @@ class Exercise(models.Model):
     calories = models.IntegerField(default=0)
     muscleGroup = models.TextField(default="Legs")
     unit = models.CharField(max_length=50)
+    video = models.TextField(blank="https://www.youtube.com/embed/NpEaa2P7qZI")
 
     def __str__(self):
         return self.name
