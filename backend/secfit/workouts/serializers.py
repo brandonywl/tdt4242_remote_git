@@ -201,7 +201,7 @@ class WorkoutSerializer(serializers.HyperlinkedModelSerializer):
 class ExerciseSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for an Exercise. Hyperlinks are used for relationships by default.
 
-    Serialized fields: url, id, name, description, duration, calories, muscle group, unit, instances
+    Serialized fields: url, id, name, description, duration, calories, muscle group, unit, instances, video, instructions
 
     Attributes:
         instances:  Associated exercise instances with this Exercise type. Hyperlinks.
@@ -213,7 +213,7 @@ class ExerciseSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "instances", "video"]
+        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "instances", "video", "instructions"]
 
 
 class RememberMeSerializer(serializers.HyperlinkedModelSerializer):

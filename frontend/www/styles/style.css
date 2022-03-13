@@ -117,3 +117,22 @@
   animation: fadeIn 0.5s ease-in 1 forwards ;
 }
 
+.editable-field-hidden {
+  display: none;
+}
+
+.editable-field-visible {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.mgn-top {
+  margin-top: 10px;
+}

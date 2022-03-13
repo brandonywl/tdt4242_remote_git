@@ -74,16 +74,18 @@ class Exercise(models.Model):
     Each exercise instance must have an exercise type, e.g., Pushups, Crunches, or Lunges.
 
     Attributes:
-        name:        Name of the exercise type
-        description: Description of the exercise type
-        duration:    Duration of one unit of the exercise
-        calories:    Calories spent per minute
-        muscleGroup: What major muscle group is used in the exercise
-        unit:        Name of the unit for the exercise type (e.g., reps, seconds)
+        name:           Name of the exercise type
+        description:    Description of the exercise type
+        instructions:   Instructions on how to carry out the exercise. Include precautions to take.
+        duration:       Duration of one unit of the exercise
+        calories:       Calories spent per minute
+        muscleGroup:    What major muscle group is used in the exercise
+        unit:           Name of the unit for the exercise type (e.g., reps, seconds)
     """
 
     name = models.CharField(max_length=100)
     description = models.TextField()
+    instructions = models.TextField(default="No instructions have been given.")
     duration = models.IntegerField(default=0)
     calories = models.IntegerField(default=0)
     muscleGroup = models.TextField(default="Legs")

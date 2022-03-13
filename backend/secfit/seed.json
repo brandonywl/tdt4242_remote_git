@@ -15,6 +15,7 @@
       "fields": {
         "name": "Crunch",
         "description": "The crunch is one of the most popular abdominal exercises.",
+        "instructions": "Watch video for explanation.",
         "unit": "reps",
         "video": "https://www.youtube.com/embed/NpEaa2P7qZI"
       }

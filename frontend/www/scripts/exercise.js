@@ -38,20 +38,16 @@ function handleCancelButtonDuringEdit() {
     deleteButton.className += " hide";
     cancelButton.className += " hide";
     editButton.className = editButton.className.replace(" hide", "");
-    
-    let player = document.querySelector("#youtube-player");
-    
-    if (player.src != "") {
-        player.style.display = "block";
-    }
 
-    document.querySelector("#video-details").style.display = "none";
+    // updateDisplay(oldFormData);
+    toggleVisibility();
 
     cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
 
     let form = document.querySelector("#form-exercise");
     if (oldFormData.has("name")) form.name.value = oldFormData.get("name");
     if (oldFormData.has("description")) form.description.value = oldFormData.get("description");
+    if (oldFormData.has("instructions")) form.instructions.value = oldFormData.get("instructions");
     if (oldFormData.has("duration")) form.duration.value = oldFormData.get("duration");
     if (oldFormData.has("calories")) form.calories.value = oldFormData.get("calories");
     if (oldFormData.has("muscleGroup")) form.muscleGroup.value = oldFormData.get("muscleGroup");
@@ -60,6 +56,7 @@ function handleCancelButtonDuringEdit() {
     
     oldFormData.delete("name");
     oldFormData.delete("description");
+    oldFormData.delete("instructions");
     oldFormData.delete("duration");
     oldFormData.delete("calories");
     oldFormData.delete("muscleGroup");
@@ -78,6 +75,7 @@ async function createExercise() {
     let formData = new FormData(form);
     let body = {"name": formData.get("name"), 
                 "description": formData.get("description"),
+                "instructions": formData.get("instructions"),
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": formData.get("muscleGroup"), 
@@ -105,8 +103,8 @@ function handleEditExerciseButtonClick() {
     cancelButton.className = cancelButton.className.replace(" hide", "");
     deleteButton.className = deleteButton.className.replace(" hide", "");
 
-    document.querySelector("#youtube-player").style.display = "none";
-    document.querySelector("#video-details").style.display = "block";
+
+    toggleVisibility();
 
     cancelButton.addEventListener("click", handleCancelButtonDuringEdit);
 
@@ -122,6 +120,27 @@ async function deleteExercise(id) {
         document.body.prepend(alert);
     } else {
         window.location.replace("exercises.html");
+    }
+}
+
+function updateDisplay(response) {
+    for (let key of Object.keys(response)) {
+        let ele = document.querySelector(`#${key}`)
+        if (ele != null) {
+            ele.textContent = response[key];
+        }
+    }
+
+    toggleVisibility();
+
+    let player = document.querySelector("#youtube-player");
+
+    if (player.src != response["video"]) {
+        player.src = response["video"];
+    }
+
+    if (player.src == "") {
+        player.style.display = "none";
     }
 }
 
@@ -146,19 +165,25 @@ async function retrieveExercise(id) {
             let input = form.querySelector(selector);
             let newVal = exerciseData[key];
             input.value = newVal;
-
-            if (key === "video") {
-                document.querySelector("#youtube-player").src = newVal;
-            }
         }
         document.querySelector("select").setAttribute("disabled", "")
 
-        let player = document.querySelector("#youtube-player");
-        if (player.src == "") {
-            player.style.display = "none";
-        }
+        updateDisplay(exerciseData);
 
     }
+}
+
+function toggleVisibility() {
+    let visible = document.querySelectorAll(".visible");
+    let hidden = document.querySelectorAll(".hidden");
+
+    visible.forEach(x => {
+        x.classList.replace("visible", "hidden");
+    });
+
+    hidden.forEach(x => {
+        x.classList.replace("hidden", "visible");
+    })
 }
 
 function processYoutubeURL(url) {
@@ -209,6 +234,7 @@ async function updateExercise(id) {
 
     let body = {"name": formData.get("name"), 
                 "description": formData.get("description"),
+                "instructions": formData.get("instructions"),
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
@@ -233,21 +259,12 @@ async function updateExercise(id) {
         cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
         
         
-        let player = document.querySelector("#youtube-player");
-        let videoURL = formData.get("video");
 
-        if (player.src != videoURL) {
-            player.src = videoURL;
-        }
-        
-        if (player.src != "") {
-            player.style.display = "block";
-        }
-
-        document.querySelector("#video-details").style.display = "none";
+        updateDisplay(body);
 
         oldFormData.delete("name");
         oldFormData.delete("description");
+        oldFormData.delete("instructions");
         oldFormData.delete("duration");
         oldFormData.delete("calories");
         oldFormData.delete("muscleGroup");
