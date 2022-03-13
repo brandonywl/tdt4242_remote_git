@@ -140,7 +140,7 @@ function updateDisplay(response) {
     }
 
     if (player.src == "") {
-        player.style.display = "none";
+        player.classList.replace("visible", "hidden");
     }
 }
 
