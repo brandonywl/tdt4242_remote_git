@@ -16,7 +16,9 @@ test:
     - coverage xml -o coverage.xml
   coverage: '/\d+\%\s*$/'
   artifacts:
-    expire_in: 1 week
+    paths:
+      - $CI_PROJECT_DIR/backend/secfit/coverage.xml
+    expire_in: 1 day
     reports:
       cobertura: $CI_PROJECT_DIR/backend/secfit/coverage.xml
 
