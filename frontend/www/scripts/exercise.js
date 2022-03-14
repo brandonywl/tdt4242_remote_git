@@ -158,6 +158,8 @@ async function retrieveExercise(id) {
     // let currentUserResponse = await sendRequest("GET", `${HOST}/api/currentUser/`);
     console.log(response.ok)
 
+    console.log(response.json())
+
     if (!response.ok) {
         let data = await response.json();
         let alert = createAlert("Could not retrieve exercise data!", data);
