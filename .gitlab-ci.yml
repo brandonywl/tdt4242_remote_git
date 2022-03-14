@@ -15,6 +15,7 @@ test:
     - coverage report
     - mkdir reports
     - coverage xml -o coverage.xml
+  coverage: '/\d+\%\s*$/'
   artifacts:
     reports:
       cobertura: coverage.xml
