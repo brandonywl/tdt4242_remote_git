@@ -1,6 +1,5 @@
 stages:
     - test
-    - pages
     - staging
   
 test:
@@ -25,7 +24,7 @@ test:
       cobertura: coverage.xml
 
 pages:
-  stage: pages
+  stage: test
   script:
     - echo | ls
     - echo | pwd
