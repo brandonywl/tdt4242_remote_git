@@ -13,11 +13,12 @@ test:
     - python manage.py test
     - coverage run --source='.' manage.py test
     - coverage report
+    - coverage html
     - coverage xml -o coverage.xml
   coverage: '/\d+\%\s*$/'
   artifacts:
     paths:
-      - $CI_PROJECT_DIR/backend/secfit/coverage.xml
+      - $CI_PROJECT_DIR/backend/secfit/htmlcov/
     expire_in: 1 day
     reports:
       cobertura: $CI_PROJECT_DIR/backend/secfit/coverage.xml
