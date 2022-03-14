@@ -18,7 +18,7 @@ test:
   coverage: '/\d+\%\s*$/'
   artifacts:
     paths:
-      - .
+      - coverage.xml
     reports:
       cobertura: coverage.xml
 
