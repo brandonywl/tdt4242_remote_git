@@ -16,6 +16,9 @@ test:
     - coverage report
     - mkdir reports
     - coverage xml -o coverage.xml
+    - echo | ls
+    - echo | pwd
+    - echo | pwd | ls
   coverage: '/\d+\%\s*$/'
   artifacts:
     reports:
@@ -24,6 +27,8 @@ test:
 pages:
   stage: pages
   script:
+    - echo | ls
+    - echo | pwd
     - mkdir reports
     - cp coverage.xml reports
   artifacts:
