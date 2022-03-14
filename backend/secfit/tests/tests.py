@@ -243,6 +243,10 @@ class RegistrationPageTest(TestCase):
 class ExercisePageTest(TestCase):
     def setUp(self):
         self.client = Client()
+
+        self.SUCCESSFUL_PUT = 200
+        self.FAILED_PUT = 400
+
         self.user_payload = {
             "username": "SecFit",
             "email": "wlyeow@stud.ntnu.no",
@@ -257,6 +261,10 @@ class ExercisePageTest(TestCase):
         self.exercise_payload = {
             "name": "Push-up",
             "description": "A push-up (or press-up in British English) is a common calisthenics exercise beginning from the prone position.",
+            "instructions": "No instructions have been given.",
+            "duration": "0",
+            "calories": "0",
+            'muscleGroup': "Legs",
             "unit": "reps",
             "video": "https://www.youtube.com/embed/IODxDxX7oi4",
             "owner_name": self.user_payload["username"]
@@ -265,7 +273,14 @@ class ExercisePageTest(TestCase):
         self.create_user()
         self.login_user()
         self.create_exercise()
-        # self.edit_exercise()
+
+    def assertSuccessPUT(self, response, status_code=None):
+        status_code = status_code if status_code else self.SUCCESSFUL_PUT
+        self.assertEquals(response.status_code, status_code)
+
+    def assertFailPUT(self, response, status_code=None):
+        status_code = status_code if status_code else self.FAILED_PUT
+        self.assertEquals(response.status_code, status_code)
 
     def create_user(self):
         api = reverse("user-list")
@@ -283,25 +298,189 @@ class ExercisePageTest(TestCase):
     def create_exercise(self):
         api = reverse("exercise-list")
 
-        payload = {
-            "name": "Push-up",
-            "description": "A push-up (or press-up in British English) is a common calisthenics exercise beginning from the prone position.",
-            "unit": "reps",
-            "video": "https://www.youtube.com/embed/IODxDxX7oi4",
-            "owner": self.user["url"],
-            "owner_name": self.user["username"],
-        }
-
-        response = self.client.post(api, payload)
+        response = self.client.post(api, self.exercise_payload)
         self.assertTrue(response.status_code, 201)
+        self.exercise_payload.pop("owner")
+        self.exercise_payload.pop("owner_name")
 
     def edit_exercise(self, payload, id=1):
-        api = f'api/exercises/{id}/'
-        response = self.client.post(api, payload)
+        api = f'/api/exercises/{id}/'
+        response = self.client.put(api, payload, content_type="application/json")
         return response
 
-    def test_test(self):
-        # self.login_user()
-        # self.edit_exercise()
-        # print(self.data)
-        pass
+    def get_exercises(self, id=1):
+        api = reverse("exercise-list")
+        response = self.client.get(api)
+        return response.json()
+
+    def test_normal_edit_success(self):
+        payload = self.exercise_payload.copy()
+        payload["description"] = "Hello."
+
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_empty_unit_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "unit"
+
+        length_a = 0
+        length_b = 1
+
+        payload[cell] = "a" * length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = "a" * length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_full_unit_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "unit"
+
+        length_a = 51
+        length_b = 50
+
+        payload[cell] = "a" * length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = "a" * length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_full_unit_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "unit"
+
+        length_a = 51
+        length_b = 50
+
+        payload[cell] = "a" * length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = "a" * length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_empty_duration_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "duration"
+
+        length_a = ""
+        length_b = 1
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    # # Should only accept positive number but django model was not set reject non-positive
+    # def test_negative_duration_boundary(self):
+    #     payload = self.exercise_payload.copy()
+    #     cell = "duration"
+
+    #     length_a = -1
+    #     length_b = 0
+
+    #     payload[cell] = length_a
+    #     response = self.edit_exercise(payload)
+    #     self.assertFailPUT(response)
+
+    #     payload[cell] = length_b
+    #     response = self.edit_exercise(payload)
+    #     self.assertSuccessPUT(response)
+
+    def test_alpha_duration_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "duration"
+
+        length_a = "a"
+        length_b = 1
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_max_duration_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "duration"
+
+        length_a = 2**63 - 1
+        length_b = 2**63
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+        payload[cell] = length_b
+        self.assertRaises(OverflowError, self.edit_exercise, payload)
+
+    def test_empty_calories_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "calories"
+
+        length_a = ""
+        length_b = 1
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    # # Should only accept positive number but django model was not set reject non-positive
+    # def test_negative_calories_boundary(self):
+    #     payload = self.exercise_payload.copy()
+    #     cell = "calories"
+
+    #     length_a = -1
+    #     length_b = 0
+
+    #     payload[cell] = length_a
+    #     response = self.edit_exercise(payload)
+    #     self.assertFailPUT(response)
+
+    #     payload[cell] = length_b
+    #     response = self.edit_exercise(payload)
+    #     self.assertSuccessPUT(response)
+
+    def test_alpha_calories_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "calories"
+
+        length_a = "a"
+        length_b = 1
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertFailPUT(response)
+
+        payload[cell] = length_b
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+    def test_max_calories_boundary(self):
+        payload = self.exercise_payload.copy()
+        cell = "calories"
+
+        length_a = 2**63 - 1
+        length_b = 2**63
+
+        payload[cell] = length_a
+        response = self.edit_exercise(payload)
+        self.assertSuccessPUT(response)
+
+        payload[cell] = length_b
+        self.assertRaises(OverflowError, self.edit_exercise, payload)
