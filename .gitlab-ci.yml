@@ -20,22 +20,11 @@ test:
     - echo | pwd | ls
   coverage: '/\d+\%\s*$/'
   artifacts:
-    reports:
-      cobertura: coverage.xml
-
-pages:
-  stage: test
-  script:
-    - echo | ls
-    - echo | pwd
-    - mkdir reports
-    - cp coverage.xml reports
-  artifacts:
-    untracked: false
-    expire_in: 30 days
     paths:
-      - reports
-
+      - ./coverage.xml
+    reports:
+      cobertura: ./coverage.xml
+      
 staging:
   type: deploy
   image: ruby
