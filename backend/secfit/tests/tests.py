@@ -239,3 +239,69 @@ class RegistrationPageTest(TestCase):
         payload[cell] = "a" * length_b
         response = self.client.post(api, payload)
         self.assertSuccessPOST(response)
+
+class ExercisePageTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_payload = {
+            "username": "SecFit",
+            "email": "wlyeow@stud.ntnu.no",
+            "password": "12345678",
+            "password1": "12345678",
+            "phone_number": "12345678",
+            "country": "Norway",
+            "city": "Trondheim",
+            "street_address": "123 Happy Lane",
+        }
+
+        self.exercise_payload = {
+            "name": "Push-up",
+            "description": "A push-up (or press-up in British English) is a common calisthenics exercise beginning from the prone position.",
+            "unit": "reps",
+            "video": "https://www.youtube.com/embed/IODxDxX7oi4",
+            "owner_name": self.user_payload["username"]
+        }
+
+        self.create_user()
+        self.login_user()
+        self.create_exercise()
+        # self.edit_exercise()
+
+    def create_user(self):
+        api = reverse("user-list")
+
+        response = self.client.post(api, self.user_payload)
+        self.user = response.json()
+
+        self.exercise_payload["owner"] = self.user["url"]
+
+    def login_user(self):
+        result = self.client.login(username=self.user_payload["username"], \
+                password=self.user_payload["password"])
+        assert result
+        
+    def create_exercise(self):
+        api = reverse("exercise-list")
+
+        payload = {
+            "name": "Push-up",
+            "description": "A push-up (or press-up in British English) is a common calisthenics exercise beginning from the prone position.",
+            "unit": "reps",
+            "video": "https://www.youtube.com/embed/IODxDxX7oi4",
+            "owner": self.user["url"],
+            "owner_name": self.user["username"],
+        }
+
+        response = self.client.post(api, payload)
+        self.assertTrue(response.status_code, 201)
+
+    def edit_exercise(self, payload, id=1):
+        api = f'api/exercises/{id}/'
+        response = self.client.post(api, payload)
+        return response
+
+    def test_test(self):
+        # self.login_user()
+        # self.edit_exercise()
+        # print(self.data)
+        pass
