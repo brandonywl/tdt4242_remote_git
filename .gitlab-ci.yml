@@ -13,12 +13,7 @@ test:
     - python manage.py test
     - coverage run --source='.' manage.py test
     - coverage report
-    - mkdir reports
-    - coverage html
     - coverage xml -o coverage.xml
-    - echo | ls
-    - echo | pwd
-    - echo | pwd | ls
   coverage: '/\d+\%\s*$/'
   artifacts:
     reports:
