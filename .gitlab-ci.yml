@@ -16,7 +16,7 @@ test:
     - coverage xml
   artifacts:
     reports:
-      cobertura: coverage.xml
+      cobertura: ./coverage.xml
 
 staging:
   type: deploy
