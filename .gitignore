@@ -8,3 +8,4 @@ backend/secfit/htmlcov/
 backend/secfit*/.coverage
 backend/secfit/*/.coverage
 backend/secfit/coverage.xml
+backend/secfit/reports/

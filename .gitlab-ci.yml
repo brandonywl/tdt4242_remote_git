@@ -13,10 +13,14 @@ test:
     - python manage.py test
     - coverage run --source='.' manage.py test
     - coverage report
-    - coverage xml
+    - mkdir reports
+    - coverage xml -o reports/coverage.xml
+    - echo | pwd
+    - echo | ls
+    - echo | ls reports
   artifacts:
     reports:
-      cobertura: '.'
+      cobertura: 'reports/coverage.xml'
 
 staging:
   type: deploy
