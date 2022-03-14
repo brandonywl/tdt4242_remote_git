@@ -21,11 +21,8 @@ test:
     - echo | pwd | ls
   coverage: '/\d+\%\s*$/'
   artifacts:
-    # paths:
-    #   - /builds/wlyeow/tdt4242-base/backend/secfit/coverage.xml
-    #   - htmlcov
     reports:
-      cobertura: $CI_PROJECT_DIR/coverage.xml
+      cobertura: $CI_PROJECT_DIR/backend/secfit/coverage.xml
 
 staging:
   type: deploy
