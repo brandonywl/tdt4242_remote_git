@@ -4,3 +4,7 @@ backend/secfit/*/__pycache__/
 backend/secfit/db.sqlite3
 .idea
 envs/*
+backend/secfit/htmlcov/
+backend/secfit*/.coverage
+backend/secfit/*/.coverage
+backend/secfit/coverage.xml

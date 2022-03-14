@@ -11,6 +11,12 @@ test:
     - apt-get update -qy
     - pip install -r requirements.txt
     - python manage.py test
+    - coverage run --source='.' manage.py test
+    - coverage report
+    - coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
 
 staging:
   type: deploy
