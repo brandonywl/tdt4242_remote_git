@@ -44,6 +44,9 @@ function updateNavBar() {
     document.getElementById("btn-register").classList.remove("hide");
   }
 
+  document.getElementsByTagName("navbar-el")[0]
+    .querySelector("#btn-searchuser").addEventListener("click", searchUser);
+
 }
 
 
@@ -197,5 +200,13 @@ function createAlert(header, data) {
 
 }
 
-window.addEventListener("DOMContentLoaded", updateNavBar);
+function searchUser() {
+  console.log("here");
+    let form = document.getElementsByTagName("navbar-el")[0].querySelector("#search-bar");
+    let formData = new FormData(form);
+    sessionStorage.setItem("searchString", formData.get("searchString"));
 
+    window.location.replace("searchusers.html");
+}
+
+window.addEventListener("DOMContentLoaded", updateNavBar);

@@ -1,7 +1,9 @@
 async function updateBio() {
     let form = document.querySelector("#updateUserBio");
     let formData = new FormData(form);
-    let body = {"bio": formData.get("bio")};
+    let body = {
+        "bio": formData.get("bio")
+    };
 
     let user = await getCurrentUser();
 
