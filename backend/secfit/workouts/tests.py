@@ -1,7 +1,6 @@
 """
 Tests for the workouts application.
 """
-from pickle import NONE
 from django.test import TestCase, Client
 
 from users.models import User
