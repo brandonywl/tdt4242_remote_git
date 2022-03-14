@@ -1,5 +1,6 @@
 stages:
     - test
+    - pages
     - staging
   
 test:
@@ -17,10 +18,19 @@ test:
     - coverage xml -o coverage.xml
   coverage: '/\d+\%\s*$/'
   artifacts:
-    paths:
-      - coverage.xml
     reports:
       cobertura: coverage.xml
+
+pages:
+  stage: pages
+  script:
+    - mkdir reports
+    - cp coverage.xml reports
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - reports
 
 staging:
   type: deploy
