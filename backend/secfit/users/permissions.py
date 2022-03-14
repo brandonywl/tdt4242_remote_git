@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 
 class IsCurrentUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        print("request.user: ", request.user)
+        print("obj: ", obj)
         return obj == request.user
 
 

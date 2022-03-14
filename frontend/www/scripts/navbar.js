@@ -23,8 +23,8 @@ class NavBar extends HTMLElement {
                 <hr>
             </div>
             <form class="d-flex p-2 navbar-nav hide" id="search-bar">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <input name="searchString" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button type="button" id="btn-searchuser" class="btn1 btn-outline-success">Search</button>
             </form>
             <div class="my-2 my-lg-0 me-5">
                 <a role="button" class="btn btn-primary hide" id="btn-register" href="register.html">Register</a>
