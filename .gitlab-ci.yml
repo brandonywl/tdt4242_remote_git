@@ -14,6 +14,7 @@ test:
     - coverage run --source='.' manage.py test
     - coverage report
     - mkdir reports
+    - coverage html
     - coverage xml -o coverage.xml
     - echo | ls
     - echo | pwd
@@ -21,10 +22,11 @@ test:
   coverage: '/\d+\%\s*$/'
   artifacts:
     paths:
-      - ./coverage.xml
+      - /builds/wlyeow/tdt4242-base/backend/secfit/coverage.xml
+      - htmlcov
     reports:
       cobertura: ./coverage.xml
-      
+
 staging:
   type: deploy
   image: ruby
